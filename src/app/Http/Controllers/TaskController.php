@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\TaskSaveException;
+use App\Models\Task;
 use App\Services\Tasks\TaskServiceInterface;
 use App\Http\Requests\TaskCreateRequest;
 use App\DTO\Task\TaskDTO;
@@ -36,5 +37,10 @@ class TaskController extends Controller
             ]);
             return response()->json(['error' => $exception->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public function getStatus(Task $task)
+    {
+        return response()->json(['status' => $task->status]);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Services\Tasks;
 
 use App\DTO\Task\TaskDTO;
+use App\Jobs\ProcessTaskJob;
+use App\Models\Task;
 use App\Repositories\Tasks\TaskRepositoryInterface;
 
 class TaskService implements TaskServiceInterface
@@ -14,9 +16,14 @@ class TaskService implements TaskServiceInterface
         $this->repository = $repository;
     }
 
-    public function createTask(TaskDTO $taskDTO): bool
+    /**
+     * Создаём задачу и сразу ставим Job в очередь
+     */
+    public function createTask(TaskDTO $taskDTO): Task
     {
-
-        return $this->repository->save($taskDTO);
+        $task = $this->repository->saveAndReturnModel($taskDTO);
+        ProcessTaskJob::dispatch($task);
+        return $task;
     }
+
 }

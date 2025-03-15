@@ -55,4 +55,5 @@ Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
 //TASKS
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'task'], function () {
     Route::post('/create', [TaskController::class, 'create']);
+    Route::get('/status/{task}', [TaskController::class, 'getStatus']);
 });

@@ -10,13 +10,10 @@ return new class extends Migration
         Schema::create('evaluations', function (Blueprint $table) {
             $table->id();
 
-            // Ссылка на задачу
             $table->foreignId('task_id')
                 ->constrained('tasks')
                 ->onDelete('cascade');
 
-            // Результат оценки качества разговора (LLM)
-            // Можно хранить в json (если много структурированной инфы)
             $table->json('result')->nullable();
 
             $table->timestamps();

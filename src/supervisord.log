@@ -1,0 +1,39 @@
+2025-03-15 14:33:06,746 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2025-03-15 14:33:06,751 INFO supervisord started with pid 8
+2025-03-15 14:33:07,761 INFO spawned: 'queue-worker' with pid 9
+2025-03-15 14:33:07,763 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:33:08,765 INFO success: queue-worker entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-03-15 14:33:08,766 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:33:10,774 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:33:13,779 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:33:13,781 INFO gave up: scheduler entered FATAL state, too many start retries too quickly
+2025-03-15 14:50:37,670 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2025-03-15 14:50:37,673 INFO supervisord started with pid 8
+2025-03-15 14:50:38,679 INFO spawned: 'queue-worker' with pid 9
+2025-03-15 14:50:38,680 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:50:39,682 INFO success: queue-worker entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-03-15 14:50:39,683 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:50:41,686 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:50:44,691 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:50:44,693 INFO gave up: scheduler entered FATAL state, too many start retries too quickly
+2025-03-15 14:57:10,601 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2025-03-15 14:57:10,609 INFO supervisord started with pid 8
+2025-03-15 14:57:11,617 INFO spawned: 'queue-worker' with pid 9
+2025-03-15 14:57:11,618 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:57:12,621 INFO success: queue-worker entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-03-15 14:57:12,622 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:57:14,631 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:57:17,637 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 14:57:17,637 INFO gave up: scheduler entered FATAL state, too many start retries too quickly
+2025-03-15 15:02:39,317 INFO exited: queue-worker (exit status 0; expected)
+2025-03-15 15:02:39,322 INFO spawned: 'queue-worker' with pid 14
+2025-03-15 15:02:40,324 INFO success: queue-worker entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-03-15 15:14:15,207 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2025-03-15 15:14:15,210 INFO supervisord started with pid 8
+2025-03-15 15:14:16,214 INFO spawned: 'queue-worker' with pid 9
+2025-03-15 15:14:16,215 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 15:14:17,217 INFO success: queue-worker entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-03-15 15:14:17,217 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 15:14:19,663 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 15:14:22,668 INFO spawnerr: can't find command '/var/www/start-scheduler.sh'
+2025-03-15 15:14:22,669 INFO gave up: scheduler entered FATAL state, too many start retries too quickly

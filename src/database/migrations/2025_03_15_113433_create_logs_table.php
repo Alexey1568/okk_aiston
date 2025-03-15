@@ -10,22 +10,13 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-
-            // Не все логи обязательно связаны с конкретной задачей
             $table->foreignId('task_id')
                 ->nullable()
                 ->constrained('tasks')
                 ->onDelete('cascade');
-
-            // Уровень лога (info, error, debug, etc.)
             $table->string('level')->default('info');
-
-            // Основное сообщение (что произошло)
             $table->text('message');
-
-            // Дополнительный контекст в виде JSON
             $table->json('context')->nullable();
-
             $table->timestamps();
         });
     }
