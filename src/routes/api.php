@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -25,11 +27,11 @@ Route::post('/register', function (Request $request) {
 });
 
 Route::post('/login', function (Request $request) {
+
     $request->validate([
         'email' => 'required|email',
         'password' => 'required',
     ]);
-
     $user = User::where('email', $request->email)->first();
 
     if (!$user || !Hash::check($request->password, $user->password)) {
@@ -42,10 +44,15 @@ Route::post('/login', function (Request $request) {
         'token' => $user->createToken('auth_token')->plainTextToken,
         'user' => $user,
     ]);
-});
+})->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
     $request->user()->tokens()->delete();
 
     return response()->json(['message' => 'Logged out']);
+});
+
+//TASKS
+Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'task'], function () {
+    Route::post('/create', [TaskController::class, 'create']);
 });

@@ -10,11 +10,8 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            // Ссылка на аудиофайл или иной идентификатор
             $table->string('audio_url')->nullable();
-            // Статус задачи (new, in_progress, done, error и т.д.)
             $table->string('status')->default('new');
-            // Дополнительные параметры задачи в формате JSON
             $table->json('metadata')->nullable();
             $table->timestamps();
         });
