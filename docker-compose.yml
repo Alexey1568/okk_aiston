@@ -81,14 +81,11 @@ services:
       sh -c "
         composer install &&
         echo 'Waiting for migrations (checking file)...' &&
-        for i in {1..30}; do
-          if [ -f /var/www/migrations-done.txt ]; then
-            echo 'Migrations complete, starting worker...';
-            break;
-          fi;
+        until [ -f /var/www/migrations-done.txt ]; do
           echo 'Migrations not ready, waiting...';
           sleep 2;
         done &&
+        echo 'Migrations complete, starting worker...' &&
         supervisord -c /etc/supervisor/conf.d/worker.conf
       "
   redis:
