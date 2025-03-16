@@ -17,6 +17,11 @@ services:
         condition: service_healthy
     networks:
       - laravel_network
+    healthcheck:
+      test: ["CMD", "bash", "-c", "test -f /var/www/migrations-done.txt"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
     command: >
       sh -c "
       sleep 5 &&
@@ -27,6 +32,7 @@ services:
       composer install &&
       php artisan config:clear &&
       php artisan migrate:fresh --seed &&
+      touch /var/www/migrations-done.txt &&
       php artisan storage:link &&
       chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
       chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
@@ -62,9 +68,12 @@ services:
     volumes:
       - ./supervisor/worker.conf:/etc/supervisor/conf.d/worker.conf:ro
     depends_on:
-      - app
-      - postgres
-      - redis
+      app:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - laravel_network
     command: sh -c "composer install && sleep 10 && supervisord -c /etc/supervisor/conf.d/worker.conf"
