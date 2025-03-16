@@ -76,7 +76,19 @@ services:
         condition: service_healthy
     networks:
       - laravel_network
-    command: sh -c "composer install && sleep 10 && supervisord -c /etc/supervisor/conf.d/worker.conf"
+    command: >
+      sh -c "
+      composer install &&
+      for i in {1..30}; do
+        if php artisan migrate:status >/dev/null 2>&1; then
+          echo 'Migrations ready, starting worker...';
+          break;
+        fi;
+        echo 'Waiting for migrations...';
+        sleep 2;
+      done &&
+      supervisord -c /etc/supervisor/conf.d/worker.conf
+      "
 
 
   redis:
