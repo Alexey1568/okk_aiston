@@ -18,7 +18,9 @@ services:
     networks:
       - laravel_network
     command: >
-      sh -c "sleep 5 &&
+      sh -c "
+      sleep 5 &&
+      until nc -z -v -w30 postgres 5432; do echo 'Waiting for database...'; sleep 1; done &&
       php artisan config:clear &&
       php artisan config:cache &&
       php artisan migrate:fresh --seed &&
