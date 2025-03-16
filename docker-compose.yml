@@ -24,6 +24,7 @@ services:
       mkdir -p /var/www/bootstrap/cache /var/www/storage/logs &&
       chown -R www-data:www-data /var/www/bootstrap/cache /var/www/storage/logs &&
       chmod -R 775 /var/www/bootstrap/cache /var/www/storage/logs &&
+      composer install &&
       php artisan config:clear &&
       php artisan migrate:fresh --seed &&
       php artisan storage:link &&
@@ -66,7 +67,8 @@ services:
       - redis
     networks:
       - laravel_network
-    command: sh -c "sleep 10 && supervisord -c /etc/supervisor/conf.d/worker.conf"
+    command: sh -c "composer install && sleep 10 && supervisord -c /etc/supervisor/conf.d/worker.conf"
+
 
   redis:
     image: redis:latest
