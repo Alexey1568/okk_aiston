@@ -13,15 +13,15 @@ RUN apt-get update && apt-get install -y \
       && docker-php-ext-enable redis \
       && apt-get install -y procps \
       && rm -rf /var/lib/apt/lists/*
-
+COPY src/ /var/www
+WORKDIR /var/www
+RUN mkdir -p /var/www/bootstrap/cache /var/www/storage/logs && \
+    chmod -R 775 /var/www/bootstrap/cache /var/www/storage/logs
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin \
     --filename=composer
 
-WORKDIR /var/www
 
-COPY src/ /var/www
-RUN mkdir -p /var/www/bootstrap/cache /var/www/storage/logs && chmod -R 775 /var/www/bootstrap/cache /var/www/storage/logs
 
 COPY cron/crontab /etc/cron.d/artisan-schedule
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
