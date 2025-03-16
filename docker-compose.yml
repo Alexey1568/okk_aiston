@@ -8,8 +8,6 @@ services:
     container_name: laravel_app
     restart: always
     working_dir: /var/www
-    volumes:
-      - ./src:/var/www
     depends_on:
       postgres:
         condition: service_healthy
@@ -21,7 +19,7 @@ services:
       sh -c "
       sleep 5 &&
       until nc -z -v -w30 postgres 5432; do echo 'Waiting for database...'; sleep 1; done &&
-      composer install --no-dev --no-interaction --prefer-dist &&
+      composer install --no-interaction --prefer-dist &&
       php artisan config:clear &&
       php artisan config:cache &&
       php artisan migrate:fresh --seed &&
