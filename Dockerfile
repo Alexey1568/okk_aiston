@@ -21,7 +21,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 WORKDIR /var/www
 
 COPY src/ /var/www
-RUN mkdir -p /var/www/bootstrap/cache && chmod -R 775 /var/www/bootstrap/cache
+RUN mkdir -p /var/www/bootstrap/cache /var/www/storage/logs && chmod -R 775 /var/www/bootstrap/cache /var/www/storage/logs
+
 COPY cron/crontab /etc/cron.d/artisan-schedule
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod 0644 /etc/cron.d/artisan-schedule
