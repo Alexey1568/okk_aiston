@@ -10,6 +10,7 @@ services:
     working_dir: /var/www
     volumes:
       - ./src:/var/www
+      - shared_data:/shared
     depends_on:
       postgres:
         condition: service_healthy
@@ -18,7 +19,7 @@ services:
     networks:
       - laravel_network
     healthcheck:
-      test: ["CMD", "bash", "-c", "test -f /var/www/migrations-done.txt"]
+      test: ["CMD", "bash", "-c", "test -f /shared/migrations-done.txt"]
       interval: 5s
       timeout: 2s
       retries: 20
@@ -32,7 +33,7 @@ services:
       composer install &&
       php artisan config:clear &&
       php artisan migrate:fresh --seed &&
-      touch /var/www/migrations-done.txt &&
+      touch /shared/migrations-done.txt &&
       php artisan storage:link &&
       chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
       chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
@@ -68,6 +69,7 @@ services:
     volumes:
       - ./src:/var/www
       - ./supervisor/worker.conf:/etc/supervisor/conf.d/worker.conf:ro
+      - shared_data:/shared
     depends_on:
       app:
         condition: service_healthy
@@ -81,7 +83,7 @@ services:
       sh -c "
         composer install &&
         echo 'Waiting for migrations (checking file)...' &&
-        until [ -f /var/www/migrations-done.txt ]; do
+        until [ -f /shared/migrations-done.txt ]; do
           echo 'Migrations not ready, waiting...';
           sleep 2;
         done &&
@@ -131,7 +133,7 @@ services:
 
 volumes:
   postgres_data:
-
+  shared_data:
 networks:
   laravel_network:
     driver: bridge
