@@ -66,6 +66,7 @@ services:
     restart: always
     working_dir: /var/www
     volumes:
+      - ./src:/var/www
       - ./supervisor/worker.conf:/etc/supervisor/conf.d/worker.conf:ro
     depends_on:
       app:
@@ -78,19 +79,18 @@ services:
       - laravel_network
     command: >
       sh -c "
-      composer install &&
-      for i in {1..30}; do
-        if php artisan migrate:status >/dev/null 2>&1; then
-          echo 'Migrations ready, starting worker...';
-          break;
-        fi;
-        echo 'Waiting for migrations...';
-        sleep 2;
-      done &&
-      supervisord -c /etc/supervisor/conf.d/worker.conf
+        composer install &&
+        echo 'Waiting for migrations (checking file)...' &&
+        for i in {1..30}; do
+          if [ -f /var/www/migrations-done.txt ]; then
+            echo 'Migrations complete, starting worker...';
+            break;
+          fi;
+          echo 'Migrations not ready, waiting...';
+          sleep 2;
+        done &&
+        supervisord -c /etc/supervisor/conf.d/worker.conf
       "
-
-
   redis:
     image: redis:latest
     container_name: redis_cache
