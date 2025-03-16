@@ -4,3 +4,5 @@ src/storage/
 src/bootstrap/cache/
 src/.env
 src/.env.example
+src/supervisord.log
+

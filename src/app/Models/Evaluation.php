@@ -8,7 +8,6 @@ class Evaluation extends Model
 {
     protected $table = 'evaluations';
     protected $guarded = [];
-  //  protected $casts = ['result' => 'array'];
 
     public function task()
     {
