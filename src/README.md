@@ -1,66 +1,169 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OKK Aiston</title>
+  <style>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OKK Aiston</h1>
+  </header>
 
-## About Laravel
+  <section>
+    <h2>Описание</h2>
+    <p>
+      Проект представляет собой Laravel-приложение для обработки задач, включающее транскрибацию аудио, оценку качества и интеграцию с внешними сервисами. В системе реализованы API для регистрации, аутентификации, создания задач и получения результатов, а также планировщик для регулярной обработки задач.
+    </p>
+  </section>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+  <section>
+    <h2>Доступ к приложению</h2>
+    <p>
+      Приложение доступно по адресу: <a href="http://localhost:8000">http://localhost:8000</a>.<br>
+      При отправке запросов необходимо использовать порт <strong>8000</strong>.
+    </p>
+  </section>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+  <section>
+    <h2>Требования</h2>
+    <ul>
+      <li><a href="https://www.docker.com/">Docker</a> и <a href="https://docs.docker.com/compose/">docker-compose</a></li>
+      <li>Git</li>
+    </ul>
+  </section>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+  <section>
+    <h2>Установка и запуск</h2>
+    <ol>
+      <li>
+        <strong>Клонирование репозитория:</strong>
+        <pre><code>git clone https://github.com/Alexey1568/okk_aiston
+cd okk_aiston</code></pre>
+      </li>
+      <li>
+        <strong>Сборка Docker образов:</strong>
+        <pre><code>docker-compose build</code></pre>
+      </li>
+      <li>
+        <strong>Запуск контейнеров:</strong>
+        <pre><code>docker-compose up</code></pre>
+        <p>После успешного запуска приложение будет доступно по адресу: <a href="http://localhost:8000">http://localhost:8000</a>.</p>
+      </li>
+    </ol>
+  </section>
 
-## Learning Laravel
+  <section>
+    <h2>Тестирование API</h2>
+    <p>Приложение предоставляет следующие API эндпоинты:</p>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    <article>
+      <h3>Регистрация пользователя</h3>
+      <ul>
+        <li><strong>URL:</strong> <code>http://localhost:8000/register</code></li>
+        <li><strong>Метод:</strong> POST</li>
+        <li>
+          <strong>Параметры:</strong>
+          <ul>
+            <li><code>name</code> – имя пользователя</li>
+            <li><code>email</code> – email</li>
+            <li><code>password</code> – пароль</li>
+          </ul>
+        </li>
+      </ul>
+    </article>
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    <article>
+      <h3>Аутентификация пользователя</h3>
+      <ul>
+        <li><strong>URL:</strong> <code>http://localhost:8000/login</code></li>
+        <li><strong>Метод:</strong> POST</li>
+        <li>
+          <strong>Параметры:</strong>
+          <ul>
+            <li><code>email</code> – email</li>
+            <li><code>password</code> – пароль</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Примечание:</strong> Эндпоинт требует аутентификации (middleware <code>auth:sanctum</code>).
+        </li>
+      </ul>
+    </article>
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    <article>
+      <h3>Выход из системы</h3>
+      <ul>
+        <li><strong>URL:</strong> <code>http://localhost:8000/logout</code></li>
+        <li><strong>Метод:</strong> POST</li>
+      </ul>
+    </article>
 
-## Laravel Sponsors
+    <article>
+      <h3>Создание задачи</h3>
+      <ul>
+        <li><strong>URL:</strong> <code>http://localhost:8000/task/create</code></li>
+        <li><strong>Метод:</strong> POST</li>
+        <li>
+          <strong>Параметры:</strong>
+          <ul>
+            <li><code>audio_url</code> – URL аудиофайла (обязательно, должен быть корректным URL)</li>
+            <li><code>status</code> – статус задачи (по умолчанию <code>new</code>)</li>
+            <li><code>metadata</code> – дополнительные данные (необязательно)</li>
+          </ul>
+        </li>
+      </ul>
+    </article>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    <article>
+      <h3>Получение результата задачи</h3>
+      <ul>
+        <li><strong>URL:</strong> <code>http://localhost:8000/task/result/{task}</code></li>
+        <li><strong>Метод:</strong> GET</li>
+        <li><strong>Параметры:</strong> <code>{task}</code> – идентификатор задачи</li>
+      </ul>
+    </article>
 
-### Premium Partners
+    <p>Для тестирования API можно использовать <a href="https://www.postman.com/">Postman</a> или <a href="https://curl.se/">curl</a>.</p>
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+  </section>
 
-## Contributing
+  <section>
+    <h2>Маршруты (роуты) приложения</h2>
+    <p>Роуты определены следующим образом:</p>
+    <pre><code>use App\Http\Controllers\LoginController;
+use App\Http\Controllers\TaskController;
+use Illuminate\Support\Facades\Route;
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Route::post('/register', [LoginController::class, 'register']);
 
-## Code of Conduct
+Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout']);
+});
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+// TASKS
+Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'task'], function () {
+Route::post('/create', [TaskController::class, 'create']);
+Route::get('/result/{task}', [TaskController::class, 'getTaskResult']);
+});</code></pre>
+  </section>
 
-## Security Vulnerabilities
+  <section>
+    <h2>Планировщик задач</h2>
+    <p>
+      Планировщик настроен через Laravel Scheduler и реализует периодическую обработку задач:
+    </p>
+    <ul>
+      <li>
+        <strong>Описание:</strong> В классе <code>Kernel</code> в методе <code>schedule</code> задан запуск задачи каждые 5 минут, которая обрабатывает задачи и запускает событие <code>TaskCompleted</code> при завершении обработки.
+      </li>
+    </ul>
+  </section>
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+</body>
+</html>
