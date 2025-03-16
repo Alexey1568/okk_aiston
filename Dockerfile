@@ -20,7 +20,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 WORKDIR /var/www
 
 COPY src/ /var/www
-
+RUN chmod -R 775 /var/www/bootstrap/cache
 RUN composer install --no-dev --no-interaction --prefer-dist
 
 
