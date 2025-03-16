@@ -17,7 +17,7 @@ services:
         condition: service_healthy
     networks:
       - laravel_network
-    command: sh -c "sleep 10 && supervisord -c /etc/supervisor/conf.d/supervisord.conf"
+    command: sh -c "sleep 5 && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && chmod -R 775 /var/www/storage /var/www/bootstrap/cache && supervisord -c /etc/supervisor/conf.d/supervisord.conf"
 
 
   postgres:
@@ -47,7 +47,6 @@ services:
     restart: always
     working_dir: /var/www
     volumes:
-      - ./src:/var/www
       - ./supervisor/worker.conf:/etc/supervisor/conf.d/worker.conf:ro
     depends_on:
       - app
@@ -55,7 +54,6 @@ services:
       - redis
     networks:
       - laravel_network
-    # Запускаем supervisor, чтобы стартовал queue worker
     command: sh -c "sleep 10 && supervisord -c /etc/supervisor/conf.d/worker.conf"
   redis:
     image: redis:latest

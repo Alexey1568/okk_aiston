@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
             Log::info('Обработка запущена!!!');
             dispatch(new ProcessTaskJob());
         })->everyMinute();
-        $schedule->exec('touch /var/www/test_schedule.txt')->everyMinute();
     }
 
     protected function commands()

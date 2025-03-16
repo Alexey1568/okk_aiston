@@ -15,5 +15,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 //TASKS
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'task'], function () {
     Route::post('/create', [TaskController::class, 'create']);
-    Route::get('/status/{task}', [TaskController::class, 'getStatus']);
+    Route::get('/result/{task}', [TaskController::class, 'getTaskResult']);
 });

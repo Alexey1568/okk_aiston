@@ -18,8 +18,7 @@ class ProcessTaskJob implements ShouldQueue
     public function handle()
     {
         $fakeStatusService = app(FakeStatusServiceInterface::class);
-        $tasks = Task::where('status', '!=', 'completed')->get();
-
+        $tasks = Task::whereIN('status', ['new', 'in_progress'])->get();
         foreach ($tasks as $task) {
             $fakeStatus = $fakeStatusService->checkTasksStatus($task);
 

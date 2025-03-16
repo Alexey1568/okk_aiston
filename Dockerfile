@@ -27,7 +27,6 @@ RUN composer install --no-dev --no-interaction --prefer-dist
 
 RUN php artisan config:cache
 
-RUN chown -R www-data:www-data storage bootstrap/cache
 COPY cron/crontab /etc/cron.d/artisan-schedule
 COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod 0644 /etc/cron.d/artisan-schedule
