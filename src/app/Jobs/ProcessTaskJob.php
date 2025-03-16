@@ -2,8 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Events\TaskCompleted;
 use App\Models\Task;
-use App\Services\Transcriptions\FakeTranscriptionServiceInterface;
+use App\Services\FakeStatus\FakeStatusServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,24 +15,25 @@ class ProcessTaskJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected Task $task;
-    protected FakeTranscriptionServiceInterface $transcriptionService;
-
-    /**
-     * Создаём Job с привязкой к модели Task.
-     */
-    public function __construct(Task $task)
+    public function handle()
     {
-        $this->task = $task;
-    }
+        $fakeStatusService = app(FakeStatusServiceInterface::class);
+        $tasks = Task::where('status', '!=', 'completed')->get();
 
-    /**
-     * Логика обработки задачи.
-     */
-    public function handle(FakeTranscriptionServiceInterface $transcriptionService)
-    {
-        $this->task->update(['status' => 'processing']);
-        sleep(5);
-        $transcriptionService->process($this->task);
+        foreach ($tasks as $task) {
+            $fakeStatus = $fakeStatusService->checkTasksStatus($task);
+
+            if (is_null($fakeStatus)) {
+                continue;
+            }
+            if ($fakeStatus['status'] === 'completed') {
+                $task->status = 'completed';
+                $task->save();
+                event(new TaskCompleted($task));
+            } else {
+                $task->status = $fakeStatus['status'];
+                $task->save();
+            }
+        }
     }
 }

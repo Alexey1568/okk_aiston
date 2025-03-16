@@ -6,5 +6,5 @@ use App\Models\Task;
 
 interface FakeTranscriptionServiceInterface
 {
-    public function process(Task $task);
+    public function processDiarization(Task $task);
 }

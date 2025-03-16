@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Repositories\Tasks\TaskRepositoryInterface;
+use App\Services\FakeStatus\FakeStatusService;
+use App\Services\FakeStatus\FakeStatusServiceInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Tasks\TaskServiceInterface;
 use App\Services\Tasks\TaskService;
@@ -19,6 +21,7 @@ class TaskServiceProvider extends ServiceProvider
     {
         $this->app->bind(TaskServiceInterface::class, TaskService::class);
         $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
+        $this->app->bind(FakeStatusServiceInterface::class, FakeStatusService::class);
     }
 
     /**

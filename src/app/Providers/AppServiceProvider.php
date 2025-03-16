@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\LLM\FakeLLMService;
+use App\Services\LLM\FakeLLMServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(FakeLLMServiceInterface::class, FakeLLMService::class);
     }
 
     /**

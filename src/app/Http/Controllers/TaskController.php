@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\TaskSaveException;
 use App\Models\Task;
+use App\Services\FakeStatus\FakeStatusService;
+use App\Services\FakeStatus\FakeStatusServiceInterface;
 use App\Services\Tasks\TaskServiceInterface;
 use App\Http\Requests\TaskCreateRequest;
 use App\DTO\Task\TaskDTO;
@@ -13,10 +15,12 @@ use Illuminate\Support\Facades\Log;
 class TaskController extends Controller
 {
     private TaskServiceInterface $taskService;
+    private FakeStatusServiceInterface $fakeStatusService;
 
-    public function __construct(TaskServiceInterface $taskService)
+    public function __construct(TaskServiceInterface $taskService, FakeStatusServiceInterface $fakeStatusService)
     {
         $this->taskService = $taskService;
+        $this->fakeStatusService = $fakeStatusService;
     }
 
     public function create(TaskCreateRequest $request)
@@ -39,8 +43,10 @@ class TaskController extends Controller
         }
     }
 
-    public function getStatus(Task $task)
+    public function getTaskStatus(Task $task)
     {
-        return response()->json(['status' => $task->status]);
+
     }
+
+
 }

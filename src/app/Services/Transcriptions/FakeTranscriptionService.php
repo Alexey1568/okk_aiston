@@ -4,6 +4,7 @@ namespace App\Services\Transcriptions;
 
 use App\Models\Task;
 use App\Models\Transcription;
+use Illuminate\Support\Facades\Log;
 
 class FakeTranscriptionService implements FakeTranscriptionServiceInterface
 {
@@ -11,20 +12,25 @@ class FakeTranscriptionService implements FakeTranscriptionServiceInterface
      * Генерирует фейковые результаты транскрибации и диоризации для задачи и сохраняет их в БД.
      *
      * @param Task $task
-     * @return void
+     * @return ?array
      */
-    public function process(Task $task): void
+    public function processDiarization(Task $task): array|null
     {
-        $results = $this->generateFakeResults();
-
-        foreach ($results as $result) {
-            Transcription::create([
-                'task_id'    => $task->id,
-                'speaker'    => $result['speaker'],
-                'start_time' => $result['start'],
-                'end_time'   => $result['end'],
-                'text'       => $result['text'],
-            ]);
+        try {
+            $results = $this->generateFakeResults();
+            foreach ($results as $result) {
+                Transcription::create([
+                    'task_id'    => $task->id,
+                    'speaker'    => $result['speaker'],
+                    'start_time' => $result['start'],
+                    'end_time'   => $result['end'],
+                    'text'       => $result['text'],
+                ]);
+            }
+            return $results;
+        }catch (\Exception $exception){
+            Log::error($exception->getMessage());
+            return null;
         }
     }
 

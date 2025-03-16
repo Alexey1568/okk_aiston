@@ -1,4 +1,3 @@
-# Dockerfile
 
 FROM php:8.2-fpm
 
@@ -7,14 +6,18 @@ RUN apt-get update && apt-get install -y \
     unzip \
     curl \
     git \
+    cron \
+    supervisor \
     && docker-php-ext-install pdo pdo_pgsql \
-    && apt-get install -y supervisor \
-    && rm -rf /var/lib/apt/lists/* \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis \
+    && apt-get install -y procps \
+    && rm -rf /var/lib/apt/lists/* 
+ 
 
-RUN curl -sS https://getcomposer.org/installer \
-    | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --install-dir=/usr/local/bin \
+    --filename=composer
 
 WORKDIR /var/www
 
@@ -25,5 +28,10 @@ RUN composer install --no-dev --no-interaction --prefer-dist
 RUN php artisan config:cache
 
 RUN chown -R www-data:www-data storage bootstrap/cache
+COPY cron/crontab /etc/cron.d/artisan-schedule
+COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN chmod 0644 /etc/cron.d/artisan-schedule
+RUN crontab /etc/cron.d/artisan-schedule
 
-CMD ["php-fpm"]
+EXPOSE 9000
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

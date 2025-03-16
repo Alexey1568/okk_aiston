@@ -11,7 +11,8 @@ interface TaskServiceInterface
      * Создаёт задачу на основе переданного DTO.
      *
      * @param TaskDTO $taskDTO
-     * @return Task
+     * @return bool
      */
-    public function createTask(TaskDTO $taskDTO): Task;
+    public function createTask(TaskDTO $taskDTO): bool;
+
 }
