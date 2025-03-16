@@ -17,8 +17,15 @@ services:
         condition: service_healthy
     networks:
       - laravel_network
-    command: sh -c "sleep 5 && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && chmod -R 775 /var/www/storage /var/www/bootstrap/cache && supervisord -c /etc/supervisor/conf.d/supervisord.conf"
-
+    command: >
+      sh -c "sleep 5 &&
+      php artisan config:clear &&
+      php artisan config:cache &&
+      php artisan migrate:fresh --seed &&
+      php artisan storage:link &&
+      chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
+      chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
+      supervisord -c /etc/supervisor/conf.d/supervisord.conf"
 
   postgres:
     image: postgres:latest
@@ -39,6 +46,7 @@ services:
       retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
   worker:
     build:
       context: .
@@ -55,6 +63,7 @@ services:
     networks:
       - laravel_network
     command: sh -c "sleep 10 && supervisord -c /etc/supervisor/conf.d/worker.conf"
+
   redis:
     image: redis:latest
     container_name: redis_cache

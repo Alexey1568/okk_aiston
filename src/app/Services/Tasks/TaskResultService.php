@@ -8,6 +8,8 @@ use App\Models\Task;
 class TaskResultService implements TaskResultInterface
 {
     /**
+     * @param Task $task
+     *@return TaskResultDTO
      * @throws TaskNotFoundException
      */
     public function getResult(Task $task): TaskResultDTO
