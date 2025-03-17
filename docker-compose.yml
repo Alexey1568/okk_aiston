@@ -71,17 +71,9 @@ services:
       - ./src:/var/www
       - ./supervisor/worker.conf:/etc/supervisor/conf.d/worker.conf:ro
       - shared_data:/shared
-    depends_on:
-      app:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
     networks:
       - laravel_network
     command: ["sh", "-c", "composer install && echo 'Waiting for migrations (checking file)...' && until [ -f /shared/migrations-done.txt ]; do echo 'Migrations not ready, waiting...'; sleep 2; done && echo 'Migrations complete, starting worker...' && supervisord -c /etc/supervisor/conf.d/worker.conf"]
-
   redis:
     image: redis:latest
     container_name: redis_cache
