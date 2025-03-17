@@ -19,7 +19,7 @@ services:
     networks:
       - laravel_network
     healthcheck:
-      test: ["CMD", "bash", "-c", "test -f /shared/migrations-done.txt"]
+      test: ["CMD-SHELL", "pgrep php-fpm"]
       interval: 5s
       timeout: 2s
       retries: 20
@@ -37,8 +37,9 @@ services:
       php artisan storage:link &&
       chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
       chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
-      echo 'Сборка завершена, проект готов version: 3.8' &&
+      echo 'Сборка завершена, проект готов' &&
       supervisord -c /etc/supervisor/conf.d/supervisord.conf"
+      
   postgres:
     image: postgres:latest
     container_name: postgres_db
@@ -80,6 +81,7 @@ services:
     networks:
       - laravel_network
     command: ["sh", "-c", "composer install && echo 'Waiting for migrations (checking file)...' && until [ -f /shared/migrations-done.txt ]; do echo 'Migrations not ready, waiting...'; sleep 2; done && echo 'Migrations complete, starting worker...' && supervisord -c /etc/supervisor/conf.d/worker.conf"]
+
   redis:
     image: redis:latest
     container_name: redis_cache
@@ -124,6 +126,7 @@ services:
 volumes:
   postgres_data:
   shared_data:
+
 networks:
   laravel_network:
     driver: bridge
