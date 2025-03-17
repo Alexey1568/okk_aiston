@@ -18,6 +18,7 @@ services:
         condition: service_healthy
     networks:
       - laravel_network
+    # Используем healthcheck, проверяя, что php‑fpm запущен
     healthcheck:
       test: ["CMD-SHELL", "pgrep php-fpm"]
       interval: 5s
@@ -25,21 +26,24 @@ services:
       retries: 20
     command: >
       sh -c "
-      sleep 5 &&
-      until nc -z -v -w30 postgres 5432; do echo 'Waiting for database...'; sleep 1; done &&
-      mkdir -p /var/www/bootstrap/cache /var/www/storage/logs &&
-      chown -R www-data:www-data /var/www/bootstrap/cache /var/www/storage/logs &&
-      chmod -R 775 /var/www/bootstrap/cache /var/www/storage/logs &&
-      composer install &&
-      php artisan config:clear &&
-      php artisan migrate:fresh --seed &&
-      touch /shared/migrations-done.txt &&
-      php artisan storage:link &&
-      chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
-      chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
-      echo 'Сборка завершена, проект готов' &&
-      supervisord -c /etc/supervisor/conf.d/supervisord.conf"
-      
+        sleep 5 &&
+        until nc -z -v -w30 postgres 5432; do
+          echo 'Waiting for database...'; sleep 1;
+        done &&
+        mkdir -p /var/www/bootstrap/cache /var/www/storage/logs &&
+        chown -R www-data:www-data /var/www/bootstrap/cache /var/www/storage/logs &&
+        chmod -R 775 /var/www/bootstrap/cache /var/www/storage/logs &&
+        composer install &&
+        php artisan config:clear &&
+        php artisan migrate:fresh --seed &&
+        touch /shared/migrations-done.txt &&
+        php artisan storage:link &&
+        chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
+        chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
+        echo 'Сборка завершена, проект готов' &&
+        supervisord -c /etc/supervisor/conf.d/supervisord.conf
+      "
+
   postgres:
     image: postgres:latest
     container_name: postgres_db
@@ -73,7 +77,9 @@ services:
       - shared_data:/shared
     networks:
       - laravel_network
-    command: ["sh", "-c", "composer install && echo 'Waiting for migrations (checking file)...' && until [ -f /shared/migrations-done.txt ]; do echo 'Migrations not ready, waiting...'; sleep 2; done && echo 'Migrations complete, starting worker...' && supervisord -c /etc/supervisor/conf.d/worker.conf"]
+    # В воркере больше не вызываем composer install, а ждём появления файла миграций
+    command: ["sh", "-c", "echo 'Waiting for migrations (checking file)...' && until [ -f /shared/migrations-done.txt ]; do echo 'Migrations not ready, waiting...'; sleep 2; done && echo 'Migrations complete, starting worker...' && supervisord -c /etc/supervisor/conf.d/worker.conf"]
+
   redis:
     image: redis:latest
     container_name: redis_cache
