@@ -39,7 +39,6 @@ services:
       chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
       echo 'Сборка завершена, проект готов version: 3.8' &&
       supervisord -c /etc/supervisor/conf.d/supervisord.conf"
-
   postgres:
     image: postgres:latest
     container_name: postgres_db
@@ -80,8 +79,7 @@ services:
         condition: service_healthy
     networks:
       - laravel_network
-    command: >
-      sh -c "composer install && echo 'Waiting for migrations (checking file)...' && until [ -f /shared/migrations-done.txt ]; do echo 'Migrations not ready, waiting...'; sleep 2; done && echo 'Migrations complete, starting worker...' && supervisord -c /etc/supervisor/conf.d/worker.conf"
+    command: ["sh", "-c", "composer install && echo 'Waiting for migrations (checking file)...' && until [ -f /shared/migrations-done.txt ]; do echo 'Migrations not ready, waiting...'; sleep 2; done && echo 'Migrations complete, starting worker...' && supervisord -c /etc/supervisor/conf.d/worker.conf"]
   redis:
     image: redis:latest
     container_name: redis_cache
